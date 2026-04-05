@@ -1,12 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGame } from '../context/GameContext';
 import { Button } from '../components/Button';
-import { MessageSquare, ChevronRight, ChevronLeft } from 'lucide-react';
+import { Card } from '../components/Card';
+import { MessageSquare, ChevronRight, ChevronLeft, Clock } from 'lucide-react';
 
 export const GamePhase = () => {
     const { players, turnIndex, submitDescription, descriptions, nextPhase, t, lang } = useGame();
     const [descInput, setDescInput] = useState('');
+    const [timeLeft, setTimeLeft] = useState(60);
+
+    useEffect(() => {
+        if (timeLeft <= 0) return;
+        const timer = setInterval(() => {
+            setTimeLeft(prev => prev - 1);
+        }, 1000);
+        return () => clearInterval(timer);
+    }, [timeLeft]);
 
     const activePlayer = players[turnIndex];
 
@@ -22,19 +32,38 @@ export const GamePhase = () => {
     return (
         <div className="flex flex-col w-full max-w-4xl mx-auto py-8 px-4 h-full">
             {/* Header Info */}
-            <div className="flex justify-between items-center mb-8 bg-gray-800 p-6 rounded-3xl border border-gray-700 shadow-xl overflow-hidden relative group">
-                <div className="absolute inset-0 bg-indigo-500/5 transition-colors group-hover:bg-indigo-500/10" />
-                <div className="flex items-center gap-4 relative z-10">
-                    <div className="text-5xl animate-bounce">{activePlayer.avatar}</div>
-                    <div>
-                        <h2 className="text-2xl font-black text-white leading-tight">
-                            {t('itsTurn').replace('{name}', activePlayer.name)}
-                        </h2>
-                        <p className="text-indigo-400 font-bold uppercase tracking-widest text-xs">{t('speakAloud')}</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                <div className="flex justify-between items-center bg-gray-800 p-6 rounded-3xl border border-gray-700 shadow-xl overflow-hidden relative group">
+                    <div className="absolute inset-0 bg-indigo-500/5 transition-colors group-hover:bg-indigo-500/10" />
+                    <div className="flex items-center gap-4 relative z-10">
+                        <div className="text-5xl animate-bounce">{activePlayer.avatar}</div>
+                        <div>
+                            <h2 className="text-2xl font-black text-white leading-tight">
+                                {t('itsTurn').replace('{name}', activePlayer.name)}
+                            </h2>
+                            <p className="text-indigo-400 font-bold uppercase tracking-widest text-xs">{t('speakAloud')}</p>
+                        </div>
+                    </div>
+                    <div className="bg-gray-900 border border-gray-700 px-5 py-2 rounded-2xl text-white font-black text-lg relative z-10 shadow-inner">
+                        {turnIndex + 1} / {players.length}
                     </div>
                 </div>
-                <div className="bg-gray-900 border border-gray-700 px-5 py-2 rounded-2xl text-white font-black text-lg relative z-10 shadow-inner">
-                    {turnIndex + 1} / {players.length}
+
+                <div className="flex justify-between items-center bg-gray-800 p-6 rounded-3xl border border-gray-700 shadow-xl overflow-hidden relative group">
+                    <div className="absolute inset-0 bg-red-500/5 transition-colors group-hover:bg-red-500/10" />
+                    <div className="flex items-center gap-4 relative z-10">
+                        <div className={`p-3 rounded-2xl ${timeLeft < 10 ? 'bg-red-500/20 text-red-500 animate-pulse' : 'bg-gray-700 text-indigo-400'}`}>
+                            <Clock size={24} />
+                        </div>
+                        <div>
+                            <h2 className="text-sm font-bold text-gray-400 uppercase tracking-widest leading-none mb-1">
+                                {t('timerLabel')}
+                            </h2>
+                            <div className={`text-3xl font-black tabular-nums ${timeLeft < 10 ? 'text-red-500' : 'text-white'}`}>
+                                {timeLeft}{t('seconds')}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 

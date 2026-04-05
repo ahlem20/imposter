@@ -7,8 +7,16 @@ export const useGame = () => useContext(GameContext);
 
 export const GameProvider = ({ children }) => {
     const [lang, setLang] = useState('en');
-    const [players, setPlayers] = useState([]);
+    const [players, setPlayers] = useState(() => {
+        const saved = localStorage.getItem('imposter_players');
+        return saved ? JSON.parse(saved) : [];
+    });
     const [selectedCategory, setSelectedCategory] = useState("Food");
+
+    useEffect(() => {
+        localStorage.setItem('imposter_players', JSON.stringify(players));
+    }, [players]);
+
     const [impostersCount, setImpostersCount] = useState(1);
     const [word, setWord] = useState('');
     const [imposterIds, setImposterIds] = useState([]);

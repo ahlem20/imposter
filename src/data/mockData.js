@@ -50,11 +50,15 @@ export const translations = {
         theImposterWas: "The sneaky imposter was",
         playAgain: "Play Again",
         lobby: "Lobby",
+        backToHome: "Back to Home",
         food: "Food",
         family: "Family",
         places: "Places",
         things: "Things",
-        impostersCount: "Number of Imposters"
+        impostersCount: "Number of Imposters",
+        timerLabel: "Discussion Timer",
+        seconds: "s",
+        returningToHome: "Returning to home in {seconds}s"
     },
     ar: {
         title: "المحتال",
@@ -88,11 +92,15 @@ export const translations = {
         theImposterWas: "المحتال المخادع كان",
         playAgain: "لعبة جديدة",
         lobby: "القائمة الرئيسية",
+        backToHome: "العودة للرئيسية",
         food: "طعام",
         family: "العائلة",
         places: "أماكن",
         things: "أشياء",
-        impostersCount: "عدد المحتالين"
+        impostersCount: "عدد المحتالين",
+        timerLabel: "وقت المناقشة",
+        seconds: "ثانية",
+        returningToHome: "العودة للرئيسية خلال {seconds} ثانية"
     }
 };
 
